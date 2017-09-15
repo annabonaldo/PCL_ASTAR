@@ -1,0 +1,3 @@
+C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/CMakeFiles/PCL_ASTAR.dir
+C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/CMakeFiles/ZERO_CHECK.dir
