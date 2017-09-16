@@ -1,28 +1,55 @@
 #include "IOmanager.h"
-#include <pcl/visualization/cloud_viewer.h>
+//#include <pcl/visualization/cloud_viewer.h>
+//#include "PointCloudGraph2D.h"
 #include "PointCloudGraph3D.h"
+#include "PointCloudGraph2D.h"
+#include <pcl/io/io.h>
+#include <pcl/io/pcd_io.h>
 #include "Astar.h"
 int
 main (int argc, char** argv)
 {
-  //PARAMETRS
-  Params::K_SIZE = 5; 
-  std::string FILE ="C:\\pointclouds\\ism_test_cat.pcd" ; 
-  //-------------------
-  // from file
-  /*
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::io::loadPCDFile (FILE, *cloud);
-  */
-   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-   cloud = PointCloudGraph3D::RandomCloud(200); 
+  //PARAMETRS 
+  
+   Params::RANDOM = false;
+   if(!Params::RANDOM) Params::setFile("C:\\pointclouds\\ism_test_cat.pcd"); 
+   Params::RANDOM_SIZE = 100;
 
-  PointCloudGraph g = PointCloudGraph3D(cloud);
-  std::cout<<" End graph computation"<<std::endl; 
-  Astar algorithm; 
-  std::cout<<" START"<<std::endl; 
-  std::list<int> path  = algorithm.Compute(g); 
-  std::cout<<" END "<<std::endl; 
+   Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_GOAL; 
+   Params::N_type = NEIGHBORHOOD::RADIUS; 
+   Params::N_param = 1000.0; 
+   Params::goals_n = 1;
+   Params::is2D = false; 
+   Params::PREPROC = false; 
+
+
+   if(Params::is2D)
+   {
+     pcl::PointCloud<pcl::PointXY>::Ptr cloud2D (new pcl::PointCloud<pcl::PointXY>);
+     
+     if(Params::RANDOM) cloud2D = PointCloudGraph2D::RandomCloud(Params::RANDOM_SIZE); 
+     else               pcl::io::loadPCDFile (Params::getFile(), *cloud2D);
+     
+     PointCloudGraph2D g2 = PointCloudGraph2D(cloud2D);
+     g2.setStartAndGoal(0, 200);
+     Astar algorithm2D; 
+     std::list<int> path2D  = algorithm2D.Compute(g2); 
+   }
+
+   else
+   {
+
+     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3D (new pcl::PointCloud<pcl::PointXYZ>);
+    
+     if(Params::RANDOM) cloud3D = PointCloudGraph3D::RandomCloud(Params::RANDOM_SIZE); 
+     else               pcl::io::loadPCDFile (Params::getFile(), *cloud3D);
+
+     PointCloudGraph3D g1 = PointCloudGraph3D(cloud3D);
+     g1.setStartAndGoal(0, cloud3D->size()/3);
+     Astar algorithm3D; 
+     std::list<int> path3D  = algorithm3D.Compute(g1); 
+
+   }
 
 
 //  StartViewer(cloud); 
