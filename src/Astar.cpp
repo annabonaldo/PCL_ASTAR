@@ -3,13 +3,23 @@
 #include <pcl/common/time.h>
 std::ofstream Astar::log_file; 
 std::ofstream Astar::err_file; 
-Astar::Astar(void){}
+bool Astar::log_on = true; 
+int Astar::computation_iter = 0; 
+
+Astar::Astar(void)
+{
+  //log_on = (computation_iter > 0); 
+}
 
 std::list<int> Astar::Compute(PointCloudGraph & Graph )
 {
+    int itr = 0; 
+ // if(log_on) 
+    log() <<"Astar computation n " << (computation_iter + 1)<<".... "<<std::endl; 
+
   if(Graph.Start() == Graph.Goal())
   { 
-    log()<< "START== GOAL!!! START "<<Graph.Start() << ", GOAL "<<Graph.Goal()<<std::endl; 
+    if(log_on) log()<< "START== GOAL!!! START "<<Graph.Start() << ", GOAL "<<Graph.Goal()<<std::endl; 
      return std::list<int>(); 
   }
 
@@ -18,16 +28,20 @@ std::list<int> Astar::Compute(PointCloudGraph & Graph )
 
   int start_i =  Graph.Start();
   _goal_found = false;
-  _F = Graph.GetFloatArrayOfGraphSize(-1.0); 
+  _F.resize(Graph.GetGraphSize()); 
+  for(int i= 0; i<_F.size(); i++)
+    _F[i] = 0.0F; 
 
+  if(log_on) log()<< " START node: "<<Graph.Start() << ", GOAL node:"<<Graph.Goal()<<std::endl; 
   addToOpenQueue(Graph.Start(), Graph.H(Graph.Start())); 
   setNodeParent(Graph.Start(), -1); 
 
 
-  // WHILE QUEUE NOT EMPTY
+  // WHILE QUEUE NOT EMPT
   while((!_OPEN_QUEUE_h_id.empty()) && (!_goal_found))
   {
-    stats.itr++; 
+    itr++; 
+    printQueue(); 
     stats.queue_mean_size += _OPEN_QUEUE_h_id.size();
     
     std::pair<float, int> cur_node =*_OPEN_QUEUE_h_id.begin();
@@ -48,17 +62,18 @@ std::list<int> Astar::Compute(PointCloudGraph & Graph )
       {  
         setNodeParent(*n_it, node); 
         _goal_found = true; 
-        //log()<< "Goal found on NODE: "<< *n_it<<" Distance: " << _F[node] + Graph.GetDistance(node, *n_it) <<std::endl; 
+        if(log_on)  log()<< "Goal found on NODE: "<< *n_it<<" Distance: " << _F[node] + Graph.GetDistance(node, *n_it) <<std::endl; 
       }
       else // IS NOT GOAL 
       {
-        if(_F[node] < 0.0F) _F[node] = 0.0F; 
-        float successor_node_G = _F[node] + Graph.GetDistance(node, *n_it); 
-        float successor_node_F = Graph.H(*n_it) + successor_node_G; 
+        if(log_on)  log()<< "NODE: "<< *n_it<<" Distance: " << _F[node]<< " "<< Graph.GetDistance(node, *n_it) <<std::endl; 
+
+        float successor_node_F = getCost(Graph, node, *n_it); 
 
         // if current n_it NOT in open nodes
         if(isOpenNode(*n_it) && isCurrentEvaluationBetterThanTheStoredOne(*n_it,successor_node_F))
         {
+          if(this->computation_iter> 0) log() << " better eval on OPEN node "<< std::endl; 
           removeNodeFromOpenQueue(*n_it);
           addToOpenQueue(*n_it, successor_node_F); 
           setNodeParent(*n_it, node);  
@@ -66,6 +81,7 @@ std::list<int> Astar::Compute(PointCloudGraph & Graph )
         // if current n_it NOT in closed nodes
         else if(isClosedNode(*n_it) && isCurrentEvaluationBetterThanTheStoredOne(*n_it,successor_node_F))
         {
+          if(this->computation_iter> 0) log() << " better eval on CLOSED node "<< std::endl; 
          removeNodeFromClosed (*n_it); 
          addToOpenQueue(*n_it, successor_node_F); 
          setNodeParent(*n_it, node);
@@ -82,6 +98,7 @@ std::list<int> Astar::Compute(PointCloudGraph & Graph )
   }// END WHILE QUEUE NOT EMPTY
 
   stats.execution_time = timer.getTime(); 
+  log()<<"explored nodes: " << itr <<std::endl;
   saveResults(Graph); 
   return getPath(Graph.Start(), Graph.Goal()); 
 
@@ -103,12 +120,17 @@ std::list<int> Astar::getPath(int start, int goal)
       _child_parent_map.erase(child); 
       child = parent; 
     }
-    path.push_front(start); 
-    /*log()<<"PATH: "; 
+
+      if(log_on) log()<<"PATH: "; 
     for(std::list<int>::iterator it = path.begin(); it!=path.end(); it++)
-      log()<<*it <<" "; 
-    log()<<" ||"<<std::endl; */
+      if(log_on) log()<<*it <<" "; 
+    if(log_on) log()<<" ||"<<std::endl; 
   }
+  else  if(log_on) log()<<" goal not -found "<< std::endl; 
+
+  stats.path_lenght = path.size(); 
+
+ if(log_on) log()<<"A star end ---------------------------------"<< std::endl<<std::endl; 
   return path; 
 }
 
@@ -172,6 +194,7 @@ void Astar::addToOpenQueue(int node, float eval)
   _OPEN_QUEUE_h_id.insert(std::pair<float, int>(eval, node));  // add the eval-node pair to ordered queue
   _OPEN_id_h.insert(std::pair<int, float>(node, eval)); // add the node-id-key map element eval value
   _F[node] = eval; 
+  log()<< _F[node] << " eval "<<std::endl; 
 }
 
 void Astar::addToClosed(int node)
@@ -218,12 +241,38 @@ void Astar::printQueue()
 
 void Astar::saveResults(PointCloudGraph & Graph)
 {
+
+  if(Params::PREPROC) 
+    Graph.SaveCostsOnGraph(this->_F); 
+
+  stats.itr = 0; 
   stats.n_closed_nodes = _CLOSED.size(); 
   stats.n_open_nodes   = _OPEN_QUEUE_h_id.size(); 
   stats.start_goal_distance =  Graph.GetDistance(Graph.Start(), Graph.Goal()); 
-  stats.path_lenght = this->getPath(Graph.Start(), Graph.Goal()).size(); 
   stats.cloud_size = Graph.GetGraphSize(); 
   stats.queue_mean_size = stats.queue_mean_size / stats.itr; 
   stats.logHeaders(); 
   stats.log(); 
+
+  computation_iter++; 
+}
+
+float Astar::getCost(PointCloudGraph & Graph, int node, int succ)
+{
+  float successor_node_F = 0.0F; 
+  if(_F[node] <= 0.0F )_F[node] = 0.0F; 
+
+  if(Params::PREPROC && this->computation_iter > 0)
+  {
+    successor_node_F =  Graph.H(succ);
+    if(successor_node_F <= 0.0F ) successor_node_F = 0.0F; 
+  }
+  else
+  {
+
+      float successor_node_G = _F[node] + Graph.GetDistance(node, succ); 
+      successor_node_F = Graph.H(succ) + successor_node_G; 
+  }
+
+  return successor_node_F;
 }

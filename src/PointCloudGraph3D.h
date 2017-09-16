@@ -13,7 +13,7 @@ public:
   virtual void  ComputeGraphRadiusSearch(float radius); 
   virtual float GetDistance(int x, int y); 
   virtual int   GetGraphSize() const; 
-  virtual float H(int node); 
+  virtual float ComputeH(int node); 
 
   static boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ>> RandomCloud(int size); 
 

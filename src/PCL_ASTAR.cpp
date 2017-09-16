@@ -11,17 +11,18 @@ main (int argc, char** argv)
 {
   //PARAMETRS 
   
-   Params::RANDOM = false;
+   Params::RANDOM = true;
    if(!Params::RANDOM) Params::setFile("C:\\pointclouds\\ism_test_cat.pcd"); 
    Params::RANDOM_SIZE = 100;
 
-   Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_GOAL; 
+   Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE; 
    Params::N_type = NEIGHBORHOOD::RADIUS; 
    Params::N_param = 1000.0; 
    Params::goals_n = 1;
    Params::is2D = false; 
-   Params::PREPROC = false; 
-
+   Params::PREPROC = true; 
+   Params::deleteAstarLogFile = true;  
+   Params::deleteGraphLogFile = false; Params::removeFiles(); 
 
    if(Params::is2D)
    {
@@ -31,9 +32,15 @@ main (int argc, char** argv)
      else               pcl::io::loadPCDFile (Params::getFile(), *cloud2D);
      
      PointCloudGraph2D g2 = PointCloudGraph2D(cloud2D);
-     g2.setStartAndGoal(0, 200);
      Astar algorithm2D; 
      std::list<int> path2D  = algorithm2D.Compute(g2); 
+
+     if( Params::PREPROC)
+     {
+       Astar algorithm2Dpreproc; 
+       std::list<int> path2D  = algorithm2Dpreproc.Compute(g2); 
+
+     }
    }
 
    else
@@ -45,9 +52,14 @@ main (int argc, char** argv)
      else               pcl::io::loadPCDFile (Params::getFile(), *cloud3D);
 
      PointCloudGraph3D g1 = PointCloudGraph3D(cloud3D);
-     g1.setStartAndGoal(0, cloud3D->size()/3);
      Astar algorithm3D; 
      std::list<int> path3D  = algorithm3D.Compute(g1); 
+
+     if( Params::PREPROC)
+     {
+       Astar algorithm3Dpreproc; 
+       std::list<int> path3D  = algorithm3Dpreproc.Compute(g1); 
+     }
 
    }
 

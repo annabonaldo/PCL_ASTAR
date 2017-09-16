@@ -26,14 +26,13 @@ public:
   int Goal()  const ; 
   std::set<int> GetNodeNeighbours(int node);
   std::vector<float> PointCloudGraph::GetFloatArrayOfGraphSize(float defalut = 0.0F) const; 
-  float G(int node); 
+  float H(int node); 
   void setStartAndGoal(int start, int goal); 
   void SetRandomStartAndGaol(); 
+  void  ComputeGraph(); 
+  void SaveCostsOnGraph(const std::vector<float> & costs); 
 
-  void UpdateCosts(std::vector<float> costs); 
-
-  virtual float H(int node) = 0; 
-  virtual void  ComputeGraph(); 
+  virtual float ComputeH(int node) = 0; 
   virtual void  ComputeGraphKNN(int k) = 0; 
   virtual void  ComputeGraphRadiusSearch(float radius) = 0; 
   virtual float GetDistance(int x, int y) = 0; 
@@ -46,7 +45,6 @@ protected:
   std::vector<std::set<int>> _graph; 
 
   std::vector<float> _G; 
-  std::vector<float> _H;
 
   int _start; 
   int _goal;
@@ -55,7 +53,7 @@ protected:
 
   void CreateCostFunctionDataStructure(); 
 
-  void printNeighbours(int node, std::ofstream & file); 
+  void printGraph(); 
 
   static std::ofstream& log(); 
   static std::ofstream& err(); 

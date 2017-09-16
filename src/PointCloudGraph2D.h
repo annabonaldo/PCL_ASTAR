@@ -11,7 +11,7 @@ public:
  // virtual void ComputeGraph(); 
   virtual float GetDistance(int x, int y); 
   virtual int   GetGraphSize() const; 
-  virtual float H(int node); 
+  virtual float ComputeH(int node); 
   virtual void  ComputeGraphKNN(int k); 
   virtual void  ComputeGraphRadiusSearch(float radius); 
 

@@ -37,6 +37,8 @@ private:
 
   void saveResults(PointCloudGraph &  Graph); 
 
+  float getCost(PointCloudGraph & Graph, int node, int succ);
+
   void printQueue(); 
  
   static std::ofstream& Astar::log(); 
@@ -44,6 +46,8 @@ private:
   static std::ofstream log_file; 
   static std::ofstream err_file; 
 
+  static bool log_on; 
+  static int computation_iter; 
 
 };
 

@@ -29,15 +29,9 @@ void PointCloudGraph::ComputeGraph()
 
   SetRandomStartAndGaol(); 
   CreateCostFunctionDataStructure(); 
+  printGraph(); 
 }
 
-float PointCloudGraph::G(int node)
-{
-  if(_G.size() > node)
-    return _G[node];
-
-  else return -1.0F; 
-}
 
 std::set<int> PointCloudGraph::GetNodeNeighbours(int node)
 {
@@ -65,23 +59,42 @@ std::vector<float> PointCloudGraph::GetFloatArrayOfGraphSize(float defalut) cons
 
 }
 
-void PointCloudGraph::UpdateCosts(std::vector<float> costs)
+void PointCloudGraph::SaveCostsOnGraph(const std::vector<float> & costs)
 {
-  _H  = this->GetFloatArrayOfGraphSize(-1.0); 
-  //Params::
-  int perc = 1; 
-  if(perc >1) 
+  _G  = this->GetFloatArrayOfGraphSize(-1.0); 
+  if( Params::PREPROC)
   {
-    for(int i = 0; i<costs.size(); i++)
-    {
-      if(i% perc == 0) _H[i] = costs[i]; 
-    }
+      log()<< " saving H"<<std::endl; 
+      int perc = 1; 
+      if(perc >1) 
+      {
+        for(int i = 0; i<costs.size(); i++)
+        {
+          if(i% perc == 0) _G[i] = costs[i]; 
+        }
+      }
+      else
+      {
+        for(int i = 0; i<costs.size(); i++)
+         { _G[i] = costs[i]; 
+           log() << _G[i] << std::endl; 
+        }
+      }
   }
+}
+
+float PointCloudGraph::H(int node)
+{
+  if(Params::PREPROC && (_G.size() == _graph.size()) && (_G[node] > 0 )) return _G[node];
+
+  return ComputeH(node); 
 }
 
 //################# PRIVATE METHODS
 void PointCloudGraph::SetRandomStartAndGaol()
 {
+  setStartAndGoal(0, this->GetGraphSize()/3);
+  /*
   int graph_size = this->_graph.size(); 
   if(graph_size > 0)
   {
@@ -97,7 +110,7 @@ void PointCloudGraph::SetRandomStartAndGaol()
       _goal = 0; 
     }
 
-  }
+  }*/
 }
 
 void PointCloudGraph::CreateCostFunctionDataStructure() 
@@ -105,10 +118,16 @@ void PointCloudGraph::CreateCostFunctionDataStructure()
   _G = GetFloatArrayOfGraphSize(); 
 }
 
-
-void PointCloudGraph::printNeighbours(int node, std::ofstream & file)
+void PointCloudGraph::printGraph()
 {
-
+  log()<< "GRAPH " <<std::endl; 
+  for(int i =0; i<_graph.size(); i++)
+  {
+    std::set<int>::iterator it = _graph[i].begin(); 
+    for(; it != _graph[i].end(); it++)
+      log()<< *it<<" "; 
+    log()<<std::endl<<std::endl;
+  }
 }
 
 void PointCloudGraph::setStartAndGoal(int start, int goal)
@@ -127,7 +146,6 @@ std::ofstream& PointCloudGraph::log()
 
   return log_file; 
 }
-
 
 std::ofstream& PointCloudGraph::err()
 {

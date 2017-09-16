@@ -4,7 +4,8 @@
  enum HEURISTIC
   {
     MIN_DISTANCE_FROM_GOAL, 
-    MIN_DISTANCE_FROM_STRAIGTH_LINE
+    MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE, 
+    MIN_MAIN_DISTANCE
   }; 
 
   enum NEIGHBORHOOD
@@ -29,6 +30,12 @@ public:
   static int goals_n;
   static bool is2D; 
   static bool PREPROC; 
+
+  static bool deleteFile;
+  static bool deleteAstarLogFile; 
+  static bool deleteGraphLogFile; 
+
+  static void removeFiles(); 
 
 private: 
     static std::string FILE; 

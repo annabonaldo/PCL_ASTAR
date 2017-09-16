@@ -6,7 +6,7 @@
 
 #include <fstream>
 #include<iostream>
-
+#include <stdio.h>
 std::string Params::FILE; 
 
 void Params::setFile(std::string  file)
@@ -26,8 +26,22 @@ NEIGHBORHOOD  Params::N_type = NEIGHBORHOOD::KNN;
 double        Params::N_param = 10.0; 
 int           Params::goals_n = 1;
 bool          Params::is2D = false; 
-bool          Params:: PREPROC = false; 
+bool          Params::PREPROC = false; 
+bool          Params::deleteFile = false; 
+bool          Params::deleteAstarLogFile = false;  
+bool          Params::deleteGraphLogFile = false;  
 
+void Params::removeFiles()
+{
+  if (deleteFile) std::remove(Params::getFile().c_str()); 
+  Params::deleteFile = false; 
+
+  if (deleteAstarLogFile) std::remove("logAstar.txt"); 
+  Params::deleteAstarLogFile = false; 
+
+  if (deleteGraphLogFile) std::remove("logGraph2D.txt"); 
+  Params::deleteGraphLogFile = false; 
+}
 
 IOmanager::IOmanager(void)
 {

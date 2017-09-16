@@ -2,13 +2,11 @@
 #include "IOmanager.h"
 using namespace std; 
 
-//std::ofstream PointCloudGraph2D::log_file; 
-//std::ofstream PointCloudGraph2D::err_file; 
 bool PointCloudGraph2D::LOG_CONSOLE_GRAPH = false; 
+
 PointCloudGraph2D::PointCloudGraph2D(void)
 {
 }
-
 
 PointCloudGraph2D::~PointCloudGraph2D(void)
 {
@@ -35,7 +33,7 @@ float PointCloudGraph2D::GetDistance(int x, int y)
   return PointCloudGraph2D::distance(point_x, point_y); 
 }
 
-float PointCloudGraph2D::H(int node)
+float PointCloudGraph2D::ComputeH(int node)
 {
   pcl::PointXY current =  this->_cloud->points.at(node); 
   pcl::PointXY start   =  this->_cloud->points.at(_start); 
@@ -49,7 +47,7 @@ float PointCloudGraph2D::H(int node)
          return distance(current, goal);
        }
 
-     case(HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE):
+     case(HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE):
        {
          float actual_distance = distance(current, goal)+distance(current, start); 
          float best_distance = distance(start, goal); 
