@@ -44,12 +44,14 @@ void Statistics::log()
   csv_file << this->n_closed_nodes       <<";";// 4
   csv_file << this->path_lenght          <<";";// 5
   csv_file << this->execution_time       <<";";// 6
+  csv_file << this->itr                  <<";";// 7
   csv_file << std::endl; 
   
 }
 
 void Statistics::logHeaders()
 {
+  return; 
   if(!csv_file.is_open())
     csv_file.open("statistics.csv", std::ios::out |std::ios::app ); 
 
@@ -71,6 +73,7 @@ void Statistics::logHeaders()
   header += "Q_CLOSE;" ;            // 4
   header += "PATH SIZE;";            // 5
   header += "EXEC TIME;";            // 6
+  header += "TOT NODES;";            // 6
 
   csv_file << header.c_str() <<std::endl;
 

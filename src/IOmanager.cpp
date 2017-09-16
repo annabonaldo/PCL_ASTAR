@@ -21,6 +21,7 @@ std::string Params::getFile()
 
 bool          Params::RANDOM = true;  
 int           Params::RANDOM_SIZE = 100;
+int           Params::RANDOM_DIM = 100;
 HEURISTIC     Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_GOAL; 
 NEIGHBORHOOD  Params::N_type = NEIGHBORHOOD::KNN; 
 double        Params::N_param = 10.0; 
@@ -39,7 +40,7 @@ void Params::removeFiles()
   if (deleteAstarLogFile) std::remove("logAstar.txt"); 
   Params::deleteAstarLogFile = false; 
 
-  if (deleteGraphLogFile) std::remove("logGraph2D.txt"); 
+  if (deleteGraphLogFile) std::remove("logGraph.txt"); 
   Params::deleteGraphLogFile = false; 
 }
 

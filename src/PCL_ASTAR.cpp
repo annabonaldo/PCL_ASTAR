@@ -6,65 +6,148 @@
 #include <pcl/io/io.h>
 #include <pcl/io/pcd_io.h>
 #include "Astar.h"
-int
-main (int argc, char** argv)
+
+
+void execute(int i)
 {
-  //PARAMETRS 
+  std::cout<< " Execution n "<<i << std::endl; 
+
+    std::cout << "Params::RANDOM    : "<< Params::RANDOM   <<std::endl; 
+   
+      if(!Params::RANDOM) 
+    std::cout <<"Params::FILE       : " << Params::getFile()<<std::endl; 
+      else{                         
+    std::cout <<"Params::RANDOM_SIZE: "<< Params::RANDOM_SIZE  <<std::endl; 
+    std::cout <<"Params::RANDOM_DIM : "<< Params::RANDOM_DIM  <<std::endl; }
+    std::cout <<"Params::H_type     : "<< Params::H_type       <<std::endl; 
+    std::cout <<"Params::N_type     : "<< Params::N_type       <<std::endl; 
+    std::cout <<"Params::N_param    : "<< Params::N_param      <<std::endl; 
+    std::cout <<"Params::goals_n    : "<< Params::goals_n      <<std::endl; 
+    std::cout <<"Params::is2D       : "<< Params::is2D         <<std::endl; 
+    std::cout <<"Params::PREPROC    : "<< Params::PREPROC       <<std::endl; 
+
+  if(Params::is2D)
+  {
+    pcl::PointCloud<pcl::PointXY>::Ptr cloud2D (new pcl::PointCloud<pcl::PointXY>);
+
+    if(Params::RANDOM) cloud2D = PointCloudGraph2D::RandomCloud(Params::RANDOM_SIZE); 
+    else               pcl::io::loadPCDFile (Params::getFile(), *cloud2D);
+
+    PointCloudGraph2D g2 = PointCloudGraph2D(cloud2D);
+    Astar algorithm2D; 
+    std::list<int> path2D  = algorithm2D.Compute(g2); 
+
+    if( Params::PREPROC)
+    {
+      Astar algorithm2Dpreproc; 
+      std::list<int> path2D  = algorithm2Dpreproc.Compute(g2); 
+
+    }
+  }
+
+  else
+  {
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3D (new pcl::PointCloud<pcl::PointXYZ>);
+
+    if(Params::RANDOM) cloud3D = PointCloudGraph3D::RandomCloud(Params::RANDOM_SIZE); 
+    else               pcl::io::loadPCDFile (Params::getFile(), *cloud3D);
+
+    PointCloudGraph3D g1 = PointCloudGraph3D(cloud3D);
+    Astar algorithm3D; 
+    std::list<int> path3D  = algorithm3D.Compute(g1); 
+
+    if( Params::PREPROC)
+    {
+      Astar algorithm3Dpreproc; 
+      std::list<int> path3D  = algorithm3Dpreproc.Compute(g1); 
+    }
+
+  }
+
+}
+
+
+
+void benchmark01()
+{
+   //PARAMETRS 
+  Params::RANDOM = true;
+  if(!Params::RANDOM) Params::setFile("C:\\pointclouds\\ism_test_cat.pcd"); 
   
-   Params::RANDOM = true;
-   if(!Params::RANDOM) Params::setFile("C:\\pointclouds\\ism_test_cat.pcd"); 
-   Params::RANDOM_SIZE = 100;
+  Params::RANDOM_DIM = 1000;
 
-   Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE; 
-   Params::N_type = NEIGHBORHOOD::RADIUS; 
-   Params::N_param = 1000.0; 
-   Params::goals_n = 1;
-   Params::is2D = false; 
-   Params::PREPROC = true; 
-   Params::deleteAstarLogFile = true;  
-   Params::deleteGraphLogFile = false; Params::removeFiles(); 
+ 
+  Params::N_type = NEIGHBORHOOD::KNN; 
+  Params::N_param = 10.0; 
+  Params::goals_n = 1;
+  Params::is2D = false; 
+  Params::PREPROC = true; 
 
-   if(Params::is2D)
-   {
-     pcl::PointCloud<pcl::PointXY>::Ptr cloud2D (new pcl::PointCloud<pcl::PointXY>);
-     
-     if(Params::RANDOM) cloud2D = PointCloudGraph2D::RandomCloud(Params::RANDOM_SIZE); 
-     else               pcl::io::loadPCDFile (Params::getFile(), *cloud2D);
-     
-     PointCloudGraph2D g2 = PointCloudGraph2D(cloud2D);
-     Astar algorithm2D; 
-     std::list<int> path2D  = algorithm2D.Compute(g2); 
+  for(int i = 100; i< 10000; i=i+100)
+  {
+    Params::RANDOM_SIZE = i;
+    Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_GOAL; 
+    execute(i); 
+  }
 
-     if( Params::PREPROC)
-     {
-       Astar algorithm2Dpreproc; 
-       std::list<int> path2D  = algorithm2Dpreproc.Compute(g2); 
+   for(int i = 100; i< 10000; i=i+100)
+  {
 
-     }
-   }
+    Params::RANDOM_SIZE = i;
+    Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE; 
+    execute(i); 
+  }
 
-   else
-   {
+   for(int i = 100; i< 10000; i=i+100)
+  {
+    Params::RANDOM_SIZE = i;
+    Params::H_type = HEURISTIC::MIN_MAIN_DISTANCE; 
+    execute(i); 
+  }
+}
 
-     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3D (new pcl::PointCloud<pcl::PointXYZ>);
-    
-     if(Params::RANDOM) cloud3D = PointCloudGraph3D::RandomCloud(Params::RANDOM_SIZE); 
-     else               pcl::io::loadPCDFile (Params::getFile(), *cloud3D);
+void benchmark02()
+{
+   //PARAMETRS 
+  Params::RANDOM = true;
+  if(!Params::RANDOM) Params::setFile("C:\\pointclouds\\ism_test_cat.pcd"); 
+  
+  Params::RANDOM_DIM = 1000;
+  Params::N_type = NEIGHBORHOOD::RADIUS; 
+  Params::N_param = 100.0; 
+  Params::goals_n = 1;
+  Params::is2D = false; 
+  Params::PREPROC = true; 
 
-     PointCloudGraph3D g1 = PointCloudGraph3D(cloud3D);
-     Astar algorithm3D; 
-     std::list<int> path3D  = algorithm3D.Compute(g1); 
+  for(int i = 100; i< 3000; i=i+100)
+  {
+    Params::RANDOM_SIZE = i;
+    Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_GOAL; 
+    execute(i); 
+  }
 
-     if( Params::PREPROC)
-     {
-       Astar algorithm3Dpreproc; 
-       std::list<int> path3D  = algorithm3Dpreproc.Compute(g1); 
-     }
+   for(int i = 100; i< 3000; i=i+100)
+  {
 
-   }
+    Params::RANDOM_SIZE = i;
+    Params::H_type = HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE; 
+    execute(i); 
+  }
 
+   for(int i = 100; i< 3000; i=i+100)
+  {
+    Params::RANDOM_SIZE = i;
+    Params::H_type = HEURISTIC::MIN_MAIN_DISTANCE; 
+    execute(i); 
+  }
+}
+int main (int argc, char** argv)
+{
+ benchmark01(); 
+ benchmark02(); 
 
-//  StartViewer(cloud); 
+  //  StartViewer(cloud); 
   return 0;
 }
 
@@ -157,20 +240,20 @@ int
 // -----Help-----
 // --------------
 void
-printUsage (const char* progName)
+  printUsage (const char* progName)
 {
   std::cout << "\n\nUsage: "<<progName<<" [options]\n\n"
-            << "Options:\n"
-            << "-------------------------------------------\n"
-            << "-h           this help\n"
-            << "-s           Simple visualisation example\n"
-            << "-r           RGB colour visualisation example\n"
-            << "-c           Custom colour visualisation example\n"
-            << "-n           Normals visualisation example\n"
-            << "-a           Shapes visualisation example\n"
-            << "-v           Viewports example\n"
-            << "-i           Interaction Customization example\n"
-            << "\n\n";
+    << "Options:\n"
+    << "-------------------------------------------\n"
+    << "-h           this help\n"
+    << "-s           Simple visualisation example\n"
+    << "-r           RGB colour visualisation example\n"
+    << "-c           Custom colour visualisation example\n"
+    << "-n           Normals visualisation example\n"
+    << "-a           Shapes visualisation example\n"
+    << "-v           Viewports example\n"
+    << "-i           Interaction Customization example\n"
+    << "\n\n";
 }
 
 
@@ -222,7 +305,7 @@ boost::shared_ptr<pcl::visualization::PCLVisualizer> customColourVis (pcl::Point
 
 
 boost::shared_ptr<pcl::visualization::PCLVisualizer> normalsVis (
-    pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud, pcl::PointCloud<pcl::Normal>::ConstPtr normals)
+  pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud, pcl::PointCloud<pcl::Normal>::ConstPtr normals)
 {
   // --------------------------------------------------------
   // -----Open 3D viewer and add point cloud and normals-----
@@ -256,7 +339,7 @@ boost::shared_ptr<pcl::visualization::PCLVisualizer> shapesVis (pcl::PointCloud<
   //-----Add shapes at cloud points-----
   //------------------------------------
   viewer->addLine<pcl::PointXYZRGB> (cloud->points[0],
-                                     cloud->points[cloud->size() - 1], "line");
+    cloud->points[cloud->size() - 1], "line");
   viewer->addSphere (cloud->points[0], 0.2, 0.5, 0.5, 0.0, "sphere");
 
   //---------------------------------------
@@ -283,7 +366,7 @@ boost::shared_ptr<pcl::visualization::PCLVisualizer> shapesVis (pcl::PointCloud<
 
 
 boost::shared_ptr<pcl::visualization::PCLVisualizer> viewportsVis (
-    pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud, pcl::PointCloud<pcl::Normal>::ConstPtr normals1, pcl::PointCloud<pcl::Normal>::ConstPtr normals2)
+  pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud, pcl::PointCloud<pcl::Normal>::ConstPtr normals1, pcl::PointCloud<pcl::Normal>::ConstPtr normals2)
 {
   // --------------------------------------------------------
   // -----Open 3D viewer and add point cloud and normals-----
@@ -318,7 +401,7 @@ boost::shared_ptr<pcl::visualization::PCLVisualizer> viewportsVis (
 
 unsigned int text_id = 0;
 void keyboardEventOccurred (const pcl::visualization::KeyboardEvent &event,
-                            void* viewer_void)
+  void* viewer_void)
 {
   pcl::visualization::PCLVisualizer *viewer = static_cast<pcl::visualization::PCLVisualizer *> (viewer_void);
   if (event.getKeySym () == "r" && event.keyDown ())
@@ -336,11 +419,11 @@ void keyboardEventOccurred (const pcl::visualization::KeyboardEvent &event,
 }
 
 void mouseEventOccurred (const pcl::visualization::MouseEvent &event,
-                         void* viewer_void)
+  void* viewer_void)
 {
   pcl::visualization::PCLVisualizer *viewer = static_cast<pcl::visualization::PCLVisualizer *> (viewer_void);
   if (event.getButton () == pcl::visualization::MouseEvent::LeftButton &&
-      event.getType () == pcl::visualization::MouseEvent::MouseButtonRelease)
+    event.getType () == pcl::visualization::MouseEvent::MouseButtonRelease)
   {
     std::cout << "Left mouse button released at position (" << event.getX () << ", " << event.getY () << ")" << std::endl;
 
@@ -367,7 +450,7 @@ boost::shared_ptr<pcl::visualization::PCLVisualizer> interactionCustomizationVis
 // -----Main-----
 // --------------
 int
-main (int argc, char** argv)
+  main (int argc, char** argv)
 {
   // --------------------------------------
   // -----Parse Command Line Arguments-----
@@ -427,7 +510,7 @@ main (int argc, char** argv)
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr (new pcl::PointCloud<pcl::PointXYZRGB>);
   std::cout << "Genarating example point clouds.\n\n";
 
-    //PARAMETRS
+  //PARAMETRS
   int NEIGHBORHOOD_size = 10; 
   std::string FILE = Params::FILE; 
   //-------------------
@@ -451,7 +534,7 @@ main (int argc, char** argv)
       point.y = basic_point.y;
       point.z = basic_point.z;
       uint32_t rgb = (static_cast<uint32_t>(r) << 16 |
-              static_cast<uint32_t>(g) << 8 | static_cast<uint32_t>(b));
+        static_cast<uint32_t>(g) << 8 | static_cast<uint32_t>(b));
       point.rgb = *reinterpret_cast<float*>(&rgb);
       point_cloud_ptr->points.push_back (point);
     }

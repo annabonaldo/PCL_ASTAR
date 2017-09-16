@@ -1,8 +1,7 @@
 #include "PointCloudGraph2D.h"
 #include "IOmanager.h"
-using namespace std; 
 
-bool PointCloudGraph2D::LOG_CONSOLE_GRAPH = false; 
+using namespace std; 
 
 PointCloudGraph2D::PointCloudGraph2D(void)
 {
@@ -46,13 +45,58 @@ float PointCloudGraph2D::ComputeH(int node)
 
          return distance(current, goal);
        }
+    case(HEURISTIC::MIN_MAIN_DISTANCE):
+    {
+        Eigen::Vector2f p_start(start.x, start.y); 
+        Eigen::Vector2f p_goal(goal.x, goal.y); 
+        Eigen::Vector2f p(current.x, current.y); 
+         
+        Eigen::Vector2f main_dir= (p_start - p_goal).normalized(); 
+        Eigen::Vector2f dir     = (p - p_goal).normalized(); 
+        double cosAlpha = main_dir.dot(dir); 
 
+        double eval = this->GetDistance(node, Goal())* cosAlpha; 
+        if(eval < 0.0)
+          eval = std::fabs(eval) + GetDistance(Start(), Goal()); 
+
+        return eval;
+
+    }
      case(HEURISTIC::MIN_DISTANCE_FROM_STRAIGTH_LINE_PLUS_GOAL_DISTANCE):
-       {
-         float actual_distance = distance(current, goal)+distance(current, start); 
-         float best_distance = distance(start, goal); 
-         return actual_distance - best_distance; 
-       }
+    {
+        if(node == Start()) return  GetDistance(Start(), Goal());
+
+        float prj_on_start_to_goal_line = 0; 
+        float distance_to_start_to_goal_line = 0; 
+
+        Eigen::Vector2f p_start(start.x, start.y); 
+        Eigen::Vector2f p_goal(goal.x, goal.y); 
+        Eigen::Vector2f p(current.x, current.y); 
+
+        double StartToGoal_distance = GetDistance(Start(), Goal()); 
+        double StartToNode_distance = GetDistance(Start(), node); 
+
+        Eigen::Vector2f StartToGoal_versor = (p_goal-p_start); 
+        Eigen::Vector2f StartToPoint_versor  = (p -p_start);
+
+        double cos_Start_angle = StartToGoal_versor.dot(StartToPoint_versor)/(StartToGoal_versor.norm()*StartToPoint_versor.norm()); 
+        double sin_Start_angle = std::sqrt(1-(cos_Start_angle * cos_Start_angle)); 
+        
+        if(cos_Start_angle >=0)
+        { 
+          prj_on_start_to_goal_line      = StartToNode_distance * cos_Start_angle; 
+          distance_to_start_to_goal_line = StartToNode_distance * std::fabs(sin_Start_angle); 
+        }
+        else
+        {
+          cos_Start_angle                = -1*cos_Start_angle;  
+          prj_on_start_to_goal_line      = (StartToNode_distance * cos_Start_angle) + StartToGoal_distance ; 
+          distance_to_start_to_goal_line = StartToNode_distance * sin_Start_angle ; 
+
+        }
+        float total = prj_on_start_to_goal_line+distance_to_start_to_goal_line; 
+        return total; 
+    }
   }
   return -1.0F; 
 }
@@ -67,17 +111,16 @@ float PointCloudGraph2D::ComputeH(int node)
 boost::shared_ptr<pcl::PointCloud<pcl::PointXY>> PointCloudGraph2D::RandomCloud(int size)
 {
   pcl::PointCloud<pcl::PointXY>::Ptr cloud;  
- cloud.reset(new pcl::PointCloud<pcl::PointXY>()); 
- cloud->width = size; 
- cloud->points.resize(size); 
+  cloud.reset(new pcl::PointCloud<pcl::PointXY>()); 
+  cloud->width = size; 
+  cloud->points.resize(size); 
   for(int i =0; i< size; i++)
-    {
-      cloud->points[i].x= 1024 * rand() / (RAND_MAX +1.0F); 
-      cloud->points[i].y= 1024 * rand() / (RAND_MAX +1.0F); 
+  {
+    cloud->points[i].x= (float)Params::RANDOM_DIM * rand() / (RAND_MAX +1.0F); 
+    cloud->points[i].y= (float)Params::RANDOM_DIM * rand() / (RAND_MAX +1.0F); 
   }
   return cloud; 
 }
-
 
 void PointCloudGraph2D::ComputeGraphKNN(int k)
 {

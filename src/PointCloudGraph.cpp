@@ -9,7 +9,7 @@ using namespace std;
 
 std::ofstream PointCloudGraph::log_file; 
 std::ofstream PointCloudGraph::err_file; 
-
+bool PointCloudGraph::log_on = false; 
 PointCloudGraph::PointCloudGraph(void)
 {
   precomputed_costs = false; 
@@ -64,7 +64,7 @@ void PointCloudGraph::SaveCostsOnGraph(const std::vector<float> & costs)
   _G  = this->GetFloatArrayOfGraphSize(-1.0); 
   if( Params::PREPROC)
   {
-      log()<< " saving H"<<std::endl; 
+      if(log_on) log()<< " saving H"<<std::endl; 
       int perc = 1; 
       if(perc >1) 
       {
@@ -77,7 +77,7 @@ void PointCloudGraph::SaveCostsOnGraph(const std::vector<float> & costs)
       {
         for(int i = 0; i<costs.size(); i++)
          { _G[i] = costs[i]; 
-           log() << _G[i] << std::endl; 
+           if(log_on)  log() << _G[i] << std::endl; 
         }
       }
   }
@@ -93,7 +93,7 @@ float PointCloudGraph::H(int node)
 //################# PRIVATE METHODS
 void PointCloudGraph::SetRandomStartAndGaol()
 {
-  setStartAndGoal(0, this->GetGraphSize()/3);
+  setStartAndGoal(0, 2*this->GetGraphSize()/3);
   /*
   int graph_size = this->_graph.size(); 
   if(graph_size > 0)
@@ -120,13 +120,13 @@ void PointCloudGraph::CreateCostFunctionDataStructure()
 
 void PointCloudGraph::printGraph()
 {
-  log()<< "GRAPH " <<std::endl; 
+  if(log_on) log()<< "GRAPH " <<std::endl; 
   for(int i =0; i<_graph.size(); i++)
   {
     std::set<int>::iterator it = _graph[i].begin(); 
     for(; it != _graph[i].end(); it++)
-      log()<< *it<<" "; 
-    log()<<std::endl<<std::endl;
+       if(log_on) log()<< *it<<" "; 
+     if(log_on) log()<<std::endl<<std::endl;
   }
 }
 
@@ -142,7 +142,7 @@ void PointCloudGraph::setStartAndGoal(int start, int goal)
 std::ofstream& PointCloudGraph::log()
 {
   if(!PointCloudGraph::log_file.is_open())
-  PointCloudGraph::log_file.open("logGraph2D.txt", std::ios::out |std::ios::app ); 
+  PointCloudGraph::log_file.open("logGraph.txt", std::ios::out |std::ios::app ); 
 
   return log_file; 
 }
@@ -150,7 +150,7 @@ std::ofstream& PointCloudGraph::log()
 std::ofstream& PointCloudGraph::err()
 {
   if(!PointCloudGraph::err_file.is_open())
-  err_file.open("errGraph2D.txt", std::ios::out |std::ios::app ); 
+  err_file.open("errGraph.txt", std::ios::out |std::ios::app ); 
 
   return err_file; 
 }

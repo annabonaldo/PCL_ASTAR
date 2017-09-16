@@ -1,20 +1,7 @@
 #include "PointCloudGraph3D.h"
 #include "IOmanager.h"
-using namespace std; 
-//#include "IOmanager.h"
-//#include <iostream>
-//#include <pcl/point_cloud.h>
-//#include <pcl/point_types.h>
-//#include <pcl/io/openni_grabber.h>
-//#include <pcl/common/time.h>
-//#include <pcl/visualization/cloud_viewer.h>
-//#include <pcl/kdtree/kdtree_flann.h>
-//#include <pcl/io/io.h>
-//#include <pcl/io/pcd_io.h>
-//#include <pcl/filters/random_sample.h>
-//#include <pcl/common/transforms.h>
 #include <pcl/common/eigen.h>
-
+using namespace std; 
 using namespace pcl;
 
 PointCloudGraph3D::PointCloudGraph3D(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
@@ -125,9 +112,9 @@ boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ>> PointCloudGraph3D::RandomCloud
   cloud->points.resize(size); 
   for(int i =0; i< size; i++)
   {
-    cloud->points[i].x= 1024 * rand() / (RAND_MAX +1.0F); 
-    cloud->points[i].y= 1024 * rand() / (RAND_MAX +1.0F); 
-    cloud->points[i].z= 1024 * rand() / (RAND_MAX +1.0F); 
+    cloud->points[i].x= (float)Params::RANDOM_DIM * rand() / (RAND_MAX +1.0F); 
+    cloud->points[i].y= (float)Params::RANDOM_DIM * rand() / (RAND_MAX +1.0F); 
+    cloud->points[i].z= (float)Params::RANDOM_DIM * rand() / (RAND_MAX +1.0F); 
   }
   return cloud; 
 }

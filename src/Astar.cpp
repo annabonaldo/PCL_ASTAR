@@ -3,7 +3,7 @@
 #include <pcl/common/time.h>
 std::ofstream Astar::log_file; 
 std::ofstream Astar::err_file; 
-bool Astar::log_on = true; 
+bool Astar::log_on = false; 
 int Astar::computation_iter = 0; 
 
 Astar::Astar(void)
@@ -14,8 +14,7 @@ Astar::Astar(void)
 std::list<int> Astar::Compute(PointCloudGraph & Graph )
 {
     int itr = 0; 
- // if(log_on) 
-    log() <<"Astar computation n " << (computation_iter + 1)<<".... "<<std::endl; 
+    if(log_on) log() <<"Astar computation n " << (computation_iter + 1)<<".... "<<std::endl; 
 
   if(Graph.Start() == Graph.Goal())
   { 
@@ -81,7 +80,7 @@ std::list<int> Astar::Compute(PointCloudGraph & Graph )
         // if current n_it NOT in closed nodes
         else if(isClosedNode(*n_it) && isCurrentEvaluationBetterThanTheStoredOne(*n_it,successor_node_F))
         {
-          if(this->computation_iter> 0) log() << " better eval on CLOSED node "<< std::endl; 
+          if(this->computation_iter> 0)  if(log_on) log() << " better eval on CLOSED node "<< std::endl; 
          removeNodeFromClosed (*n_it); 
          addToOpenQueue(*n_it, successor_node_F); 
          setNodeParent(*n_it, node);
@@ -98,8 +97,10 @@ std::list<int> Astar::Compute(PointCloudGraph & Graph )
   }// END WHILE QUEUE NOT EMPTY
 
   stats.execution_time = timer.getTime(); 
-  log()<<"explored nodes: " << itr <<std::endl;
-  saveResults(Graph); 
+   if(log_on) log()<<"explored nodes: " << itr <<std::endl;
+  
+   saveResults(Graph); 
+
   return getPath(Graph.Start(), Graph.Goal()); 
 
 }
@@ -194,7 +195,6 @@ void Astar::addToOpenQueue(int node, float eval)
   _OPEN_QUEUE_h_id.insert(std::pair<float, int>(eval, node));  // add the eval-node pair to ordered queue
   _OPEN_id_h.insert(std::pair<int, float>(node, eval)); // add the node-id-key map element eval value
   _F[node] = eval; 
-  log()<< _F[node] << " eval "<<std::endl; 
 }
 
 void Astar::addToClosed(int node)
@@ -233,6 +233,8 @@ std::ofstream& Astar::err()
 
 void Astar::printQueue()
 {
+  if(!log_on) return; 
+
   log()<< "QUEUE:{{"; 
   for(std::set<std::pair<float, int>>::iterator it = this->_OPEN_QUEUE_h_id.begin();it != _OPEN_QUEUE_h_id.end(); it++)
     log()<< "- ("<< (*it).first << "," <<(*it).second <<")"; 
@@ -245,13 +247,12 @@ void Astar::saveResults(PointCloudGraph & Graph)
   if(Params::PREPROC) 
     Graph.SaveCostsOnGraph(this->_F); 
 
-  stats.itr = 0; 
   stats.n_closed_nodes = _CLOSED.size(); 
   stats.n_open_nodes   = _OPEN_QUEUE_h_id.size(); 
   stats.start_goal_distance =  Graph.GetDistance(Graph.Start(), Graph.Goal()); 
   stats.cloud_size = Graph.GetGraphSize(); 
-  stats.queue_mean_size = stats.queue_mean_size / stats.itr; 
-  stats.logHeaders(); 
+  stats.queue_mean_size = (float)stats.queue_mean_size / (float)stats.itr; 
+  //stats.logHeaders(); 
   stats.log(); 
 
   computation_iter++; 

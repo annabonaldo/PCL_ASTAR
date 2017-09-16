@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -52,33 +52,33 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-    <PropertyGroup>
-      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\Debug\</OutDir>
-      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PCL_ASTAR.dir\Debug\</IntDir>
-      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PCL_ASTAR</TargetName>
-      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
-      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\Release\</OutDir>
-      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PCL_ASTAR.dir\Release\</IntDir>
-      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PCL_ASTAR</TargetName>
-      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
-      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\MinSizeRel\</OutDir>
-      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">PCL_ASTAR.dir\MinSizeRel\</IntDir>
-      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">PCL_ASTAR</TargetName>
-      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
-      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
-      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\RelWithDebInfo\</OutDir>
-      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">PCL_ASTAR.dir\RelWithDebInfo\</IntDir>
-      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">PCL_ASTAR</TargetName>
-      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
-      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
-      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
-    </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PCL_ASTAR.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PCL_ASTAR</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PCL_ASTAR.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PCL_ASTAR</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">PCL_ASTAR.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">PCL_ASTAR</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Anna Bonaldo\Documents\UNIPD\Ai\astaronpointcloud\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">PCL_ASTAR.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">PCL_ASTAR</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Program Files\PCL 1.6.0\3rdParty\VTK\include\vtk-5.8;C:\Program Files\PCL 1.6.0\include\pcl-1.6;C:\Program Files\PCL 1.6.0\3rdParty\Eigen\include;C:\Program Files\PCL 1.6.0\3rdParty\Boost\include;C:\Program Files\OpenNI\Include;C:\Program Files\PCL 1.6.0\3rdParty\FLANN\include;C:\Program Files\PCL 1.6.0\3rdParty\Qhull\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -117,7 +117,8 @@
       <ImportLibrary>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/Debug/PCL_ASTAR.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/Debug/PCL_ASTAR.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <Version></Version>
+      <Version>
+      </Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -137,7 +138,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;EIGEN_USE_NEW_STDVECTOR;EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET;BOOST_ALL_NO_LIB;FLANN_STATIC;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;EIGEN_USE_NEW_STDVECTOR;EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET;BOOST_ALL_NO_LIB;FLANN_STATIC;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -160,7 +162,8 @@
       <ImportLibrary>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/Release/PCL_ASTAR.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/Release/PCL_ASTAR.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <Version></Version>
+      <Version>
+      </Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -180,7 +183,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;EIGEN_USE_NEW_STDVECTOR;EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET;BOOST_ALL_NO_LIB;FLANN_STATIC;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat></DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;EIGEN_USE_NEW_STDVECTOR;EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET;BOOST_ALL_NO_LIB;FLANN_STATIC;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -203,7 +207,8 @@
       <ImportLibrary>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/MinSizeRel/PCL_ASTAR.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/MinSizeRel/PCL_ASTAR.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <Version></Version>
+      <Version>
+      </Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -246,7 +251,8 @@
       <ImportLibrary>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/RelWithDebInfo/PCL_ASTAR.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/RelWithDebInfo/PCL_ASTAR.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
-      <Version></Version>
+      <Version>
+      </Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -306,20 +312,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Astar.h" />
-    <ClInclude Include="..\src\BFS.h" />
+    <ClInclude Include="..\src\Benchmarks.h" />
     <ClInclude Include="..\src\IOmanager.h" />
     <ClInclude Include="..\src\PointCloudGraph.h" />
     <ClInclude Include="..\src\PointCloudGraph2D.h" />
     <ClInclude Include="..\src\PointCloudGraph3D.h" />
     <ClInclude Include="..\src\Statistics.h" />
-    <ClCompile Include="..\src\Astar.cpp"  />
-    <ClCompile Include="..\src\BFS.cpp"  />
-    <ClCompile Include="..\src\IOmanager.cpp"  />
-    <ClCompile Include="..\src\PCL_ASTAR.cpp"  />
-    <ClCompile Include="..\src\PointCloudGraph.cpp"  />
-    <ClCompile Include="..\src\PointCloudGraph2D.cpp"  />
-    <ClCompile Include="..\src\PointCloudGraph3D.cpp"  />
-    <ClCompile Include="..\src\Statistics.cpp"  />
+    <ClCompile Include="..\src\Astar.cpp" />
+    <ClCompile Include="..\src\Benchmarks.cpp" />
+    <ClCompile Include="..\src\IOmanager.cpp" />
+    <ClCompile Include="..\src\PCL_ASTAR.cpp" />
+    <ClCompile Include="..\src\PointCloudGraph.cpp" />
+    <ClCompile Include="..\src\PointCloudGraph2D.cpp" />
+    <ClCompile Include="..\src\PointCloudGraph3D.cpp" />
+    <ClCompile Include="..\src\Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/Anna Bonaldo/Documents/UNIPD/Ai/astaronpointcloud/build/ZERO_CHECK.vcxproj">

@@ -42,6 +42,7 @@ public:
 
 protected: 
 
+
   std::vector<std::set<int>> _graph; 
 
   std::vector<float> _G; 
@@ -59,6 +60,7 @@ protected:
   static std::ofstream& err(); 
   static std::ofstream log_file; 
   static std::ofstream err_file; 
+  static bool  log_on; 
 
 
 

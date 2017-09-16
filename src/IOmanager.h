@@ -24,12 +24,14 @@ public:
 
   static bool RANDOM; 
   static int  RANDOM_SIZE; 
+  static int RANDOM_DIM;
   static HEURISTIC H_type; 
   static NEIGHBORHOOD N_type; 
   static double N_param; 
   static int goals_n;
   static bool is2D; 
   static bool PREPROC; 
+
 
   static bool deleteFile;
   static bool deleteAstarLogFile; 
